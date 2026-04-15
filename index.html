@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Google Mini App 🚀</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 350px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    padding: 20px;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+    border-radius: 0 20px 20px 0;
+    color: white;
+}
+
+.map {
+    flex: 1;
+}
+
+.header {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255,255,255,0.9);
+}
+
+fetch("http://127.0.0.1:5000/save", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        start: start,
+        end: end,
+        vehicle: vehicle
+    })
+})
+.then(res => res.json())
+.then(data => console.log(data));
+
+
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.3);
+    color: white;
+    font-weight: bold;
+    display: none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="header">📍 Google Mini App</div>
+
+<select id="vehicle">
+<option value="">Select Vehicle</option>
+<option value="bike">🏍 Bike</option>
+<option value="car">🚗 Car</option>
+<option value="bus">🚌 Bus</option>
+<option value="train">🚆 Train</option>
+<option value="walk">🚶 Walk</option>
+</select>
+
+<!-- 🔥 38 DISTRICTS -->
+<select id="district" onchange="loadAreas()">
+<option value="">Select District</option>
+
+<option value="ariyalur">Ariyalur</option>
+<option value="chengalpattu">Chengalpattu</option>
+<option value="chennai">Chennai</option>
+<option value="coimbatore">Coimbatore</option>
+<option value="cuddalore">Cuddalore</option>
+<option value="dharmapuri">Dharmapuri</option>
+<option value="dindigul">Dindigul</option>
+<option value="erode">Erode</option>
+<option value="kallakurichi">Kallakurichi</option>
+<option value="kanchipuram">Kanchipuram</option>
+<option value="kanyakumari">Kanyakumari</option>
+<option value="karur">Karur</option>
+<option value="krishnagiri">Krishnagiri</option>
+<option value="madurai">Madurai</option>
+<option value="mayiladuthurai">Mayiladuthurai</option>
+<option value="nagapattinam">Nagapattinam</option>
+<option value="namakkal">Namakkal</option>
+<option value="nilgiris">Nilgiris</option>
+<option value="perambalur">Perambalur</option>
+<option value="pudukkottai">Pudukkottai</option>
+<option value="ramanathapuram">Ramanathapuram</option>
+<option value="ranipet">Ranipet</option>
+<option value="salem">Salem</option>
+<option value="sivagangai">Sivagangai</option>
+<option value="tenkasi">Tenkasi</option>
+<option value="thanjavur">Thanjavur</option>
+<option value="theni">Theni</option>
+<option value="thoothukudi">Thoothukudi</option>
+<option value="tiruchirappalli">Tiruchirappalli</option>
+<option value="tirunelveli">Tirunelveli</option>
+<option value="tirupathur">Tirupathur</option>
+<option value="tiruppur">Tiruppur</option>
+<option value="tiruvallur">Tiruvallur</option>
+<option value="tiruvannamalai">Tiruvannamalai</option>
+<option value="tiruvarur">Tiruvarur</option>
+<option value="vellore">Vellore</option>
+<option value="viluppuram">Viluppuram</option>
+<option value="virudhunagar">Virudhunagar</option>
+
+</select>
+
+<select id="start"></select>
+<select id="end"></select>
+
+<button onclick="calculate()">🚀 Calculate Route</button>
+
+<div class="result" id="output"></div>
+
+</div>
+
+<div class="map">
+<iframe id="mapFrame"
+width="100%"
+height="100%"
+style="border:0"
+loading="lazy"
+allowfullscreen
+src="https://www.google.com/maps?q=Tamil Nadu&output=embed">
+</iframe>
+</div>
+
+</div>
+
+<script>
+
+// 🔥 AREAS (major districts only)
+const areas = {
+
+chennai: [
+"T Nagar","Velachery","Anna Nagar","Tambaram","Adyar",
+"Guindy","Porur","Ambattur","Chromepet","Egmore",
+"Mylapore","Kodambakkam","Perambur","Thiruvanmiyur",
+"Sholinganallur","Medavakkam","Nungambakkam"
+],
+
+madurai: [
+"Mattuthavani","Anna Nagar","Koodal Nagar","Thirunagar",
+"Tallakulam","Goripalayam","Simmakkal","Arappalayam",
+"Melur","Tirupparankundram"
+],
+
+theni: [
+"Theni Town","Periyakulam","Cumbum","Bodinayakanur",
+"Andipatti","Uthamapalayam","Chinnamanur","Devaram"
+],
+
+coimbatore: [
+"Gandhipuram","RS Puram","Peelamedu","Singanallur",
+"Saibaba Colony","Town Hall","Ukkadam","Saravanampatti",
+"Kalapatti","Sulur"
+]
+
+};
+
+// 🔥 LOAD AREAS
+function loadAreas() {
+let district = document.getElementById("district").value;
+let start = document.getElementById("start");
+let end = document.getElementById("end");
+
+start.innerHTML = "";
+end.innerHTML = "";
+
+let list = areas[district] || ["Main Area","Bus Stand","Market"];
+
+list.forEach(area => {
+start.add(new Option(area, area));
+end.add(new Option(area, area));
+});
+
+// map update
+if(district !== "") {
+let mapURL = `https://www.google.com/maps?q=${district}&output=embed`;
+document.getElementById("mapFrame").src = mapURL;
+}
+}
+
+// 🔥 CALCULATE
+function calculate() {
+let start = document.getElementById("start").value;
+let end = document.getElementById("end").value;
+let vehicle = document.getElementById("vehicle").value;
+let output = document.getElementById("output");
+
+if(start === "" || end === "") {
+alert("Select locations");
+return;
+}
+
+if(vehicle === "") {
+alert("Select vehicle");
+return;
+}
+
+output.style.display = "block";
+output.innerHTML = "⏳ Calculating...";
+
+setTimeout(() => {
+
+let distance = Math.floor(Math.random() * 30) + 5;
+
+let speed = {
+bike: 40,
+car: 60,
+bus: 30,
+train: 80,
+walk: 5
+};
+
+let time = Math.round((distance / speed[vehicle]) * 60);
+
+output.innerHTML =
+"📏 <span style='color:#00ffcc'>" + distance + " KM</span><br><br>" +
+"⏱ <span style='color:#ffcc00'>" + time + " mins</span>";
+
+let mapURL = `https://www.google.com/maps?q=${start}+to+${end}&output=embed`;
+document.getElementById("mapFrame").src = mapURL;
+
+}, 1000);
+}
+
+</script>
+
+</body>
+</html>
