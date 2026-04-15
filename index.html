@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyberbullying Detection</title>
+
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    width: 400px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+p {
+    color: gray;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #5a67d8;
+}
+
+#result {
+    margin-top: 20px;
+    font-weight: bold;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1>Cyberbullying Detection 🔥</h1>
+        <p>Enter your comment below</p>
+
+        <textarea id="text" placeholder="Type your message..."></textarea>
+
+        <button onclick="checkText()">Analyze</button>
+
+        <h2 id="result"></h2>
+    </div>
+</div>
+
+<script>
+function checkText() {
+    let text = document.getElementById("text").value;
+    let result = document.getElementById("result");
+
+    if (text.toLowerCase().includes("hate") || 
+        text.toLowerCase().includes("idiot") ||
+        text.toLowerCase().includes("stupid") ||
+        text.toLowerCase().includes("ugly")) {
+        
+        result.innerHTML = "🚫 Bullying Detected";
+        result.style.color = "red";
+    } else {
+        result.innerHTML = "✅ Normal Content";
+        result.style.color = "green";
+    }
+}
+</script>
+
+</body>
+</html>
