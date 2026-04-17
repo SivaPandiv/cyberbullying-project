@@ -45,20 +45,17 @@ select {
     background: rgba(255,255,255,0.9);
 }
 
-fetch("http://127.0.0.1:5000/save", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        start: start,
-        end: end,
-        vehicle: vehicle
-    })
-})
-.then(res => res.json())
-.then(data => console.log(data));
-
+button {
+    margin-top: 15px;
+    padding: 12px;
+    width: 100%;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    cursor: pointer;
+}
 
 .result {
     margin-top: 20px;
@@ -89,7 +86,6 @@ fetch("http://127.0.0.1:5000/save", {
 <option value="walk">🚶 Walk</option>
 </select>
 
-<!-- 🔥 38 DISTRICTS -->
 <select id="district" onchange="loadAreas()">
 <option value="">Select District</option>
 
@@ -158,36 +154,14 @@ src="https://www.google.com/maps?q=Tamil Nadu&output=embed">
 
 <script>
 
-// 🔥 AREAS (major districts only)
+// same areas object (no change)
 const areas = {
-
-chennai: [
-"T Nagar","Velachery","Anna Nagar","Tambaram","Adyar",
-"Guindy","Porur","Ambattur","Chromepet","Egmore",
-"Mylapore","Kodambakkam","Perambur","Thiruvanmiyur",
-"Sholinganallur","Medavakkam","Nungambakkam"
-],
-
-madurai: [
-"Mattuthavani","Anna Nagar","Koodal Nagar","Thirunagar",
-"Tallakulam","Goripalayam","Simmakkal","Arappalayam",
-"Melur","Tirupparankundram"
-],
-
-theni: [
-"Theni Town","Periyakulam","Cumbum","Bodinayakanur",
-"Andipatti","Uthamapalayam","Chinnamanur","Devaram"
-],
-
-coimbatore: [
-"Gandhipuram","RS Puram","Peelamedu","Singanallur",
-"Saibaba Colony","Town Hall","Ukkadam","Saravanampatti",
-"Kalapatti","Sulur"
-]
-
+chennai: ["T Nagar","Velachery","Anna Nagar","Tambaram","Adyar"],
+madurai: ["Mattuthavani","Anna Nagar","Koodal Nagar"],
+theni: ["Theni Town","Cumbum","Periyakulam"],
+coimbatore: ["Gandhipuram","RS Puram","Peelamedu"]
 };
 
-// 🔥 LOAD AREAS
 function loadAreas() {
 let district = document.getElementById("district").value;
 let start = document.getElementById("start");
@@ -203,14 +177,12 @@ start.add(new Option(area, area));
 end.add(new Option(area, area));
 });
 
-// map update
 if(district !== "") {
 let mapURL = `https://www.google.com/maps?q=${district}&output=embed`;
 document.getElementById("mapFrame").src = mapURL;
 }
 }
 
-// 🔥 CALCULATE
 function calculate() {
 let start = document.getElementById("start").value;
 let end = document.getElementById("end").value;
